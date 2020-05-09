@@ -17,7 +17,7 @@ namespace GradeBook.GradeBooks
             if (Students.Count < 5)
                 throw new InvalidOperationException();
 
-            var threshold = (int)Math.Ceiling(Students.Count / 0.2);
+            var threshold = (int)Math.Ceiling(Students.Count * 0.2);
             var grades = Students.OrderByDescending(i => i.AverageGrade).Select(i => i.AverageGrade).ToList();
 
             if (grades[threshold - 1] <= averageGrade)
@@ -28,8 +28,24 @@ namespace GradeBook.GradeBooks
                 return 'C';
             else if (grades[(threshold * 4) - 1] <= averageGrade)
                 return 'D';
+
+            return 'F';
+        }
+
+        public override void CalculateStatistics()
+        {
+            if (Students.Count < 5)
+                Console.WriteLine("Ranked grading requires at least 5 students with grades in order to properly calculate a student's overall grade.");
             else
-                return 'F';
+                base.CalculateStatistics();
+        }
+
+        public override void CalculateStudentStatistics(string name)
+        {
+            if (Students.Count < 5)
+                Console.WriteLine("Ranked grading requires at least 5 students with grades in order to properly calculate a student's overall grade.");
+            else
+                base.CalculateStudentStatistics(name);
         }
     }
 }
